@@ -1,5 +1,5 @@
 
-function Product(ID,name,description, price,brand,sizes,activeSize,quantity,date,reviews,images) {
+function Product() {
     this.ID = "";
     this.name = "";
     this.description = "";
@@ -36,12 +36,16 @@ function Reviews(ID, author, date, comment, rating){
         ['value', 0],
         ['quality', 0]
     ]);
+
+   
 }
 
 
 
 let product = new Product();
-product.setID(23);
-console.log(product.getID());
+product.setID(20);
+console.log(` product id: ${product.getID()}`);
+
+console.log(` product id: ${product, 1}`);
 
 
