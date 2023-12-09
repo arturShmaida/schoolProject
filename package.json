@@ -1,0 +1,11 @@
+{
+  "name": "schoolproject",
+  "version": "1.0.0",
+  "description": "Sh++ learning enviroment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Artur Shmaida",
+  "license": "ISC"
+}
