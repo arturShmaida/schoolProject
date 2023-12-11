@@ -1,15 +1,15 @@
 
 class Product {
-    constructor() {
-        this.ID = "";
-        this.name = "";
-        this.description = "";
-        this.price = 0.0;
+    constructor(ID,name,description,price) {
+        this.ID = ID;
+        this.name = name;
+        this.description = description;
+        this.price = price;
         this.brand = "";
         this.sizes = [];
         this.activeSize = "";
         this.quantity = 0;
-        this.date = undefined;
+        this.date = new Date().getDate();
         this.reviews = [];
         this.images = [];
     }
@@ -129,6 +129,8 @@ class Product {
         } 
         return ratingSum / this.reviews.length;
     }
+
+
 }
 
 
@@ -157,12 +159,10 @@ class Reviews {
 
 function searchProducts(products = [], search){
     let resultArray = [];
-    let searchRegex = new RegExp(`${search}*`,i);
-    for(let i = 0; i< product.length;i++ ){
-        resultArray.push(products.filter(product => {
-           return searchRegex.test(product.getName()) || searchRegex.test(product.description());
-        }));
-    }
+    let searchRegex = new RegExp(`${search}+`,"i");
+    resultArray.push(products.filter(product => {
+       return searchRegex.test(product.getName()) || searchRegex.test(product.getDescription());
+    }));
     return resultArray;
 }
 
@@ -176,10 +176,23 @@ function sortProducts(products, sortRule){
   });
 }
 
-let product = new Product();
-product.setID(10);
-console.log(` product id: ${product.getID()}`);
+function createProducts(){
+    const products = [];
+    const productNames = ['Cap','Jaket','Sock', 'Wine','Tree','Cat', 'Plant','Book', 'work', 'Anton'];
+    const length = 10;
+    for(let i = 0; i < length; i++){
+       products.push(new Product(i*11,productNames[i],"boat",length - i));
+    }
+    
+    return products;
+}
+const productsArray = createProducts();
+// console.log(productsArray);
+const sortedArray  = sortProducts(productsArray,"ID");
+const searchWord = "w"
+console.log(`${searchWord} results:`);
+const filteredArray  = searchProducts(productsArray,searchWord);
 
-console.log(` product id: ${product, 1}`);
+console.log(filteredArray);
 
 
