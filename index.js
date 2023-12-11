@@ -129,18 +129,16 @@ class Product {
         } 
         return ratingSum / this.reviews.length;
     }
-
-
 }
 
 
 
 class Reviews {
-    constructor(ID, author, date, comment, rating) {
-        this.ID = "";
-        this.author = "";
-        this.date = new Date();
-        this.comment = "";
+    constructor(ID, author, date, comment) {
+        this.ID = ID;
+        this.author = author;
+        this.date = new Date(date);
+        this.comment = comment;
         this.rating = new Map([
             ['service', 0],
             ['price', 0],
@@ -157,6 +155,26 @@ class Reviews {
 }
 
 
+function searchProducts(products = [], search){
+    let resultArray = [];
+    let searchRegex = new RegExp(`${search}*`,i);
+    for(let i = 0; i< product.length;i++ ){
+        resultArray.push(products.filter(product => {
+           return searchRegex.test(product.getName()) || searchRegex.test(product.description());
+        }));
+    }
+    return resultArray;
+}
+
+function sortProducts(products, sortRule){
+  products.sort((a,b) => {
+    switch(sortRule){
+        case "ID": return a.getID() - b.getID();
+        case "price": return a.getPrice() - b.getPrice();
+        case "name": return a.getName() - b.getName();
+    }
+  });
+}
 
 let product = new Product();
 product.setID(10);
