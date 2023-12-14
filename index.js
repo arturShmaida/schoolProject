@@ -248,5 +248,5 @@ function testSortFunction() {
 	console.log(sortProducts(Array.from(productsArray), "name"));
 	console.log(sortProducts(Array.from(productsArray), "price"));
 }
-testSortFunction();
-testFilterFunction("you");
+
+console.log(0.3 - 0.2)
