@@ -1,85 +1,76 @@
-class Product {
-	constructor(ID, name, description, price) {
-		this.ID = ID;
-		this.name = name;
-		this.description = description;
-		this.price = price;
-		this.brand = "";
-		this.sizes = [];
-		this.activeSize = "";
-		this.quantity = 0;
-		this.date = new Date().getDate();
-		this.reviews = [];
-		this.images = [];
+function AbstractProduct(ID, name, description, price, quantity) {
+	if (this.constructor === AbstractProduct) {
+		throw new Error("Can't instantiate the abstract class");
 	}
+	this.ID = ID;
+	this.name = name;
+	this.description = description;
+	this.price = price;
+	this.quantity = quantity;
+	this.date = new Date().toDateString();
+	this.reviews = [];
+	this.images = [];
+}
+Object.assign(AbstractProduct.prototype, {
+	defineProperty(property, newValue) {
+		if (this.hasOwnProperty(property)) {
+			if (!newValue) {
+				return Object.getOwnPropertyDescriptor(this, property).value;
+			} else {
+				this[property] = newValue;
+			}
+		}
+	},
 	setID(ID) {
 		this.ID = ID;
-	}
+	},
 	getID() {
 		return this.ID;
-	}
+	},
 	setName(name) {
 		this.name = name;
-	}
+	},
 	getName() {
 		return this.name;
-	}
+	},
 	setDescription(description) {
 		this.description = description;
-	}
+	},
 	getDescription() {
 		return this.description;
-	}
+	},
 	setPrice(price) {
 		this.price = price;
-	}
+	},
 	getPrice() {
 		return this.price;
-	}
-	setBrand(brand) {
-		this.brand = brand;
-	}
-	getBrand() {
-		return this.brand;
-	}
-	setSizes(sizes) {
-		this.sizes = sizes;
-	}
-	getSizes() {
-		return this.sizes;
-	}
-	setActiveSize(ActiveSize) {
-		this.ActiveSize = ActiveSize;
-	}
-	getActiveSize() {
-		return this.ActiveSize;
-	}
+	},
 
 	setQuantity(quantity) {
 		this.quantity = quantity;
-	}
+	},
 	getQuantity() {
 		return this.quantity;
-	}
+	},
 
 	setDate(date) {
 		this.date = new Date(date);
-	}
+	},
 	getDate() {
 		return this.date.getDate;
-	}
+	},
 	setReviews(reviews) {
 		this.reviews = reviews;
-	}
+	},
 	getReviews() {
 		return this.reviews;
-	}
+	},
 	setImages(images) {
 		this.images = images;
-	}
+	},
 	getImages() {
 		return this.images;
-	}
+	},
 	getReviewByID(ID) {
 		if (this.reviews == []) {
 			return null;
@@ -89,29 +80,21 @@ class Product {
 				return this.reviews[i];
 			}
 		}
-	}
+	},
 	getImage(index) {
 		if (!index || index >= this.images.length || index < 0) {
 			index = 0;
 		}
 		return this.images[index];
-	}
-	addSize(size) {
-		this.sizes.push(size);
-	}
-	deleteSize(sizeName) {
-		let index = this.sizes.indexOf(sizeName);
-		if (index < this.sizes.length && index >= 0) {
-			this.sizes.splice(1, index);
-		}
-	}
+	},
+
 	addReview(review) {
 		if (review instanceof Reviews) {
 			this.reviews.push(review);
 			return true;
 		}
 		return false;
-	}
+	},
 	deleteReview(ID) {
 		for (let i = 0; i < this.reviews.length; i++) {
 			if (this.reviews[i].getID() === ID) {
@@ -119,7 +102,7 @@ class Product {
 				return;
 			}
 		}
-	}
+	},
 	getAverageRating() {
 		let ratingSum = 0;
 		for (let i = 0; i < this.reviews.length; i++) {
@@ -129,9 +112,111 @@ class Product {
 			}
 		}
 		return ratingSum / this.reviews.length;
-	}
-}
+	},
+	getFullInformation() {
+		const propertyNames = Object.getOwnPropertyNames(this);
+		let infoString = "";
+		let tempString = "";
+		for (let i = 0; i < propertyNames.length; i++) {
+			if (propertyNames[i] != undefined) {
+				if (
+					Array.isArray(this[propertyNames[i]]) &&
+					this[propertyNames[i]].length === 0
+				) {
+					tempString = "empty";
+				} else {
+					tempString = this[propertyNames[i]];
+				}
+				infoString += ` ${propertyNames[i]} - ${tempString} \n`;
+				console.log(infoString);
+			}
+		}
+	},
+	getPriceForQuantity(productQuantity) {
+		return Intl.NumberFormat("en-IN", {
+			style: "currency",
+			currency: "USD",
+		}).format(productQuantity * this.getPrice());
+	},
+});
 
+function Clothes(
+	brand,
+	activeSize,
+	material,
+	color,
+	ID,
+	name,
+	description,
+	price,
+	quantity
+) {
+	AbstractProduct.call(this, ID, name, description, price, quantity);
+	this.brand = brand;
+	this.sizes = [];
+	this.activeSize = activeSize;
+	this.material = material;
+	this.color = color;
+}
+Clothes.prototype = Object.create(AbstractProduct.prototype);
+Clothes.prototype.constructor = Clothes;
+
+Object.assign(Clothes.prototype, {
+	getMaterial() {
+		return this.material;
+	},
+	setMaterial(material) {
+		this.material = material;
+	},
+	getColor() {
+		return this.color;
+	},
+	setColor(color) {
+		this.color = color;
+	},
+	setBrand(brand) {
+		this.brand = brand;
+	},
+	getBrand() {
+		return this.brand;
+	},
+	setSizes(sizes) {
+		this.sizes = sizes;
+	},
+	getSizes() {
+		return this.sizes;
+	},
+	setActiveSize(ActiveSize) {
+		this.ActiveSize = ActiveSize;
+	},
+	getActiveSize() {
+		return this.ActiveSize;
+	},
+	addSize(size) {
+		this.sizes.push(size);
+	},
+	deleteSize(sizeName) {
+		let index = this.sizes.indexOf(sizeName);
+		if (index < this.sizes.length && index >= 0) {
+			this.sizes.splice(1, index);
+		}
+	},
+});
+function Electronics(warranty, power, ID, name, description, price, quantity) {
+	AbstractProduct.call(this, ID, name, description, price, quantity);
+	this.warranty = warranty;
+	this.power = power;
+}
+Electronics.prototype = Object.create(AbstractProduct.prototype);
+Electronics.prototype.constructor = Electronics;
+Object.assign(Electronics.prototype, {
+	getWarranty() {
+		return this.warranty;
+	},
+	setWarranty(warranty) {
+		this.warranty = warranty;
+	},
+});
 class Reviews {
 	constructor(ID, author, date, comment) {
 		this.ID = ID;
@@ -249,4 +334,18 @@ function testSortFunction() {
 	console.log(sortProducts(Array.from(productsArray), "price"));
 }
 
-console.log(0.3 - 0.2)
+const clothe = new Clothes(
+	"Nike",
+	"M",
+	"nice",
+	"red",
+	12114,
+	"Berret",
+	"",
+	6.2
+);
+console.log(clothe);
+console.log(clothe.getPriceForQuantity(3));
+
+const electronics = new Electronics(1121, 231, 121);
+console.log(electronics);
